@@ -5,6 +5,7 @@ const userSchema = new Schema({
   email: { type: String, required: true, unique: true },
   address: { type: String },
   password: { type: String, required: true },
+  following: [{ type: Schema.Types.ObjectId, ref: "User" }],
 });
 userSchema.methods.hashPassword = async function () {
   this.password = await bcrypt.hash(this.password, 10);

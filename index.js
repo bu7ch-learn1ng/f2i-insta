@@ -5,7 +5,8 @@ const port = process.env.PORT || 5000;
 
 const mongoose = require("mongoose");
 const router = require("./routes/postsRoute");
-const userRouter = require("./routes/UsersRoute")
+const userRouter = require("./routes/UsersRoute");
+const followRouter = require("./routes/followingRoute");
 const passportJWT = require('./middlewares/passportJWT')()
 
 main().catch((err) => console.log(err));
@@ -22,5 +23,6 @@ app.get("/", (req, res) => {
 });
 
 app.use("/api/posts",passportJWT.authenticate(), router);
+app.use("/api/follow",passportJWT.authenticate(), followRouter);
 app.use("/api/users", userRouter);
 app.listen(port, () => console.log(` ⚡️ [SERVER] is running on : ${port}`));

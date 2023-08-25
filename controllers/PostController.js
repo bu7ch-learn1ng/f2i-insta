@@ -1,7 +1,11 @@
 const Post = require("../models/PostModel");
 const getAllPosts = async (req, res) => {
   try {
-    const posts = await Post.find().populate('user').sort({createAt: -1});
+    const posts = await Post.find({
+      user: { $in: [...req.user.following, req.user.id] },
+    })
+      .populate("user")
+      .sort({ createAt: -1 });
     res.json(posts);
   } catch (error) {
     res.status(500).json({ msg: "Nous avons rencontrer une erreur" });
@@ -21,7 +25,11 @@ const createPost = async (req, res) => {
 const getPost = async (req, res) => {
   const id = req.params.id;
   try {
-    const post = await Post.findOne({ _id: id }.populate('user'));
+    const post = await Post.findOne(
+      { _id: id, user: { $in: [...req.user.following, req.user.id] } }.populate(
+        "user"
+      )
+    );
     res.json(post);
   } catch (error) {
     res.status(500).json({ msg: "Nous avons rencontrer une erreur" });
@@ -45,7 +53,7 @@ const UpdatePost = async (req, res, next) => {
 const deletePost = async (req, res, next) => {
   const id = req.params.id;
   try {
-    const post = await Post.findOneAndRemove({ _id: id });  
+    const post = await Post.findOneAndRemove({ _id: id });
     if (!post || post.user != req.user.id) {
       const error = new Error("Wrong request");
       throw error;
