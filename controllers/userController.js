@@ -1,7 +1,7 @@
 const User = require("../models/userModel");
-const jwt = require("jsonwebtoken");
+const jwt = require("jwt-simple");
+const config = require("../config")
 
-const secretKey = "t*T}";
 
 const register = async (req, res) => {
   const { email, password } = req.body;
@@ -26,8 +26,8 @@ const login = async (req, res) => {
     if(!passwordMatch){
       return  res.status(401).json({message:"Mot de passe incorrecte."})
     }
-    const token = jwt.sign({ userId: user._id}, secretKey)
-    res.json({token})
+    const token = jwt.encode({ id: user.id}, config.jwtSecret)
+    res.json({user, token})
   } catch (error) {
     res.status(500).json({msg:"Erreur lors de la connexion"})
   }

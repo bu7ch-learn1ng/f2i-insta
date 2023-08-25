@@ -14,7 +14,7 @@ const params = {
 module.exports = () => {
   const strategy = new Strategy(params, async (payload, done) => {
     console.log(payload)
-    const user = await User.findOne(payload.id);
+    const user = await User.findById(payload.id);
     if (!user) return done(new Error("User not found"), null);
     return done(null, user);
   });
