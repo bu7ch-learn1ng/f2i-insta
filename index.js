@@ -6,6 +6,7 @@ const port = process.env.PORT || 5000;
 const mongoose = require("mongoose");
 const router = require("./routes/postsRoute");
 const userRouter = require("./routes/UsersRoute")
+const passportJWT = require('./middlewares/passportJWT')()
 
 main().catch((err) => console.log(err));
 
@@ -15,10 +16,11 @@ async function main() {
 }
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
+app.use(passportJWT.initialize())
 app.get("/", (req, res) => {
-  console.log("🐲");
+  console.log("🐲");pm
 });
 
-app.use("/api/posts", router);
+app.use("/api/posts",passportJWT.authenticate(), router);
 app.use("/api/users", userRouter);
 app.listen(port, () => console.log(` ⚡️ [SERVER] is running on : ${port}`));
