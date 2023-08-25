@@ -11,6 +11,7 @@ const getAllPosts = async (req, res) => {
 const createPost = async (req, res) => {
   try {
     const newPost = await new Post(req.body);
+    newPost.user = req.user.id;
     newPost.save();
     res.json(newPost);
   } catch (error) {
