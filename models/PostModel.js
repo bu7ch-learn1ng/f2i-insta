@@ -4,6 +4,7 @@ const postSchema = new Schema({
   title: { type: String },
   content: { type: String },
   image: { type: String },
+  user: {type: Schema.Types.ObjectId, ref:"User"},
   createAt: { type: Date, default: Date.now() },
 });
 

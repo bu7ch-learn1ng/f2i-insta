@@ -32,5 +32,13 @@ const login = async (req, res) => {
     res.status(500).json({msg:"Erreur lors de la connexion"})
   }
 };
+const me = async(req, res, next)=>{
+  try {
+    const user = await User.findOne(req.user)
+    res.json(user)
+  } catch (error) {
+    next(error)
+  }
+}
 
-module.exports = { register, login };
+module.exports = { register, login, me };
